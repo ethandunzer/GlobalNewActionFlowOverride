@@ -1,0 +1,28 @@
+.THIS .flow-page {
+	padding: 1rem;
+}
+
+.THIS .flow-shell {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	background: #ffffff;
+	min-height: 60vh;
+}
+
+.THIS .flow-shell lightning-flow {
+	display: block;
+}
+
+@media (max-width: 768px) {
+	.THIS .flow-page {
+		padding: 0.5rem;
+	}
+
+	.THIS .flow-shell {
+		max-width: 100%;
+		padding: 0.75rem;
+		min-height: auto;
+	}
+}

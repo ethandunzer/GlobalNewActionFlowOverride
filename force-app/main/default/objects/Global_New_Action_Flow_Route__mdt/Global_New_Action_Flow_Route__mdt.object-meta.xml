@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Maps object API names to flow API names for GlobalNewActionFlowOverride.</description>
+    <label>Global New Action Flow Route</label>
+    <pluralLabel>Global New Action Flow Routes</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
