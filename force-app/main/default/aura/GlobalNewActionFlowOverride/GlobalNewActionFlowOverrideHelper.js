@@ -3,10 +3,6 @@
         switch (objectApiName) {
             case "Opportunity":
                 return "Opportunity_Creation_Screen_Flow";
-            case "Account":
-                return "Account_New_Screen_Flow";
-            case "Contact":
-                return "Contact_New_Screen_Flow";
             default:
                 return null;
         }

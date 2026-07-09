@@ -23,8 +23,6 @@ Initialization is handled in [force-app/main/default/aura/GlobalNewActionFlowOve
 Current object-to-flow mappings are defined in getFlowApiNameForObject:
 
 - Opportunity -> Opportunity_Creation_Screen_Flow
-- Account -> Account_New_Screen_Flow
-- Contact -> Contact_New_Screen_Flow
 
 To scale to more objects, add new case branches in the same switch statement.
 
