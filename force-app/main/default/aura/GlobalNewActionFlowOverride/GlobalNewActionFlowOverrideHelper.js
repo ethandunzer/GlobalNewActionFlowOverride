@@ -1,13 +1,4 @@
 ({
-    getFlowApiNameForObject: function (objectApiName) {
-        switch (objectApiName) {
-            case "Opportunity":
-                return "Opportunity_Creation_Screen_Flow";
-            default:
-                return null;
-        }
-    },
-
     getOutputVariableValue: function (outputVariables, variableName) {
         for (var i = 0; i < outputVariables.length; i += 1) {
             if (outputVariables[i].name === variableName) {

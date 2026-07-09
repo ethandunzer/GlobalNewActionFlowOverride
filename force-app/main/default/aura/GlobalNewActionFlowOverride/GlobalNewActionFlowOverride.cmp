@@ -1,4 +1,5 @@
 <aura:component
+	controller="GlobalNewActionFlowOverrideController"
 	access="global"
 	implements="lightning:actionOverride,force:hasSObjectName,flexipage:availableForAllPageTypes"
 >

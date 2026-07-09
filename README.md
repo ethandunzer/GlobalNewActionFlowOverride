@@ -15,16 +15,25 @@ The component in [force-app/main/default/aura/GlobalNewActionFlowOverride/Global
 Initialization is handled in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js):
 
 1. Read sObjectName.
-2. Route to a flow API name with a switch-based router in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js).
+2. Resolve the flow API name via Apex metadata lookup in [force-app/main/default/classes/GlobalNewActionFlowOverrideController.cls](force-app/main/default/classes/GlobalNewActionFlowOverrideController.cls).
 3. Start that flow.
 
 ## Routing Map
 
-Current object-to-flow mappings are defined in getFlowApiNameForObject:
+Current object-to-flow mappings are stored in Custom Metadata records:
 
 - Opportunity -> Opportunity_Creation_Screen_Flow
+- Supplier_Assignments__c -> Account_Create_Supplier_Assignment
 
-To scale to more objects, add new case branches in the same switch statement.
+To scale to more objects, add records in [force-app/main/default/customMetadata](force-app/main/default/customMetadata).
+
+## Metadata Configuration
+
+Route configuration is defined by the custom metadata type in [force-app/main/default/objects/Global_New_Action_Flow_Route__mdt/Global_New_Action_Flow_Route__mdt.object-meta.xml](force-app/main/default/objects/Global_New_Action_Flow_Route__mdt/Global_New_Action_Flow_Route__mdt.object-meta.xml) with fields:
+
+- Object_Api_Name__c
+- Flow_Api_Name__c
+- Is_Active__c
 
 ## Flow Output Contract
 

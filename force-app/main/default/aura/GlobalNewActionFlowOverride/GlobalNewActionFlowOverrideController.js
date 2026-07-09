@@ -1,16 +1,33 @@
 ({
     doInit: function (component, event, helper) {
         var objectApiName = component.get("v.sObjectName");
-        var flowApiName = helper.getFlowApiNameForObject(objectApiName);
+        var action = component.get("c.getFlowApiNameForObject");
 
-        if (!flowApiName) {
-            helper.navigateToObjectHome(component);
-            return;
-        }
+        action.setParams({
+            objectApiName: objectApiName
+        });
 
-        component.set("v.flowApiName", flowApiName);
-        var flow = component.find("newActionFlow");
-        flow.startFlow(flowApiName);
+        action.setCallback(this, function (response) {
+            var state = response.getState();
+
+            if (state !== "SUCCESS") {
+                helper.navigateToObjectHome(component);
+                return;
+            }
+
+            var flowApiName = response.getReturnValue();
+
+            if (!flowApiName) {
+                helper.navigateToObjectHome(component);
+                return;
+            }
+
+            component.set("v.flowApiName", flowApiName);
+            var flow = component.find("newActionFlow");
+            flow.startFlow(flowApiName);
+        });
+
+        $A.enqueueAction(action);
     },
 
     handleStatusChange: function (component, event, helper) {
