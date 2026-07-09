@@ -18,6 +18,8 @@ Initialization is handled in [force-app/main/default/aura/GlobalNewActionFlowOve
 2. Resolve the flow API name via Apex metadata lookup in [force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls](force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls).
 3. Start that flow.
 
+If metadata lookup fails, or no active route is found for the object, navigation falls back to object home.
+
 ## Routing Map
 
 Current object-to-flow mappings are stored in Custom Metadata records:
@@ -26,6 +28,11 @@ Current object-to-flow mappings are stored in Custom Metadata records:
 - Supplier_Assignments__c -> Account_Create_Supplier_Assignment
 
 To scale to more objects, add records in [force-app/main/default/customMetadata](force-app/main/default/customMetadata).
+
+Current route records are:
+
+- [force-app/main/default/customMetadata/Global_New_Action_Flow_Route.Opportunity.md-meta.xml](force-app/main/default/customMetadata/Global_New_Action_Flow_Route.Opportunity.md-meta.xml)
+- [force-app/main/default/customMetadata/Global_New_Action_Flow_Route.SupplierAssignments.md-meta.xml](force-app/main/default/customMetadata/Global_New_Action_Flow_Route.SupplierAssignments.md-meta.xml)
 
 ## Metadata Configuration
 
@@ -44,3 +51,10 @@ Each routed Screen Flow must expose an output variable named NewRecordId.
 - On ERROR, navigate to object home.
 
 This logic is implemented in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js) and helper navigation methods in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js).
+
+## Presentation Behavior
+
+The flow is rendered in a styled container in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverride.cmp](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverride.cmp) and [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverride.css](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverride.css).
+
+- Desktop: centered shell with constrained width.
+- Mobile: responsive full-width behavior with reduced padding.
