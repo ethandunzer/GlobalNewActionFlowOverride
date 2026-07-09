@@ -15,7 +15,7 @@ The component in [force-app/main/default/aura/GlobalNewActionFlowOverride/Global
 Initialization is handled in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js):
 
 1. Read sObjectName.
-2. Resolve the flow API name via Apex metadata lookup in [force-app/main/default/classes/GlobalNewActionFlowOverrideController.cls](force-app/main/default/classes/GlobalNewActionFlowOverrideController.cls).
+2. Resolve the flow API name via Apex metadata lookup in [force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls](force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls).
 3. Start that flow.
 
 ## Routing Map

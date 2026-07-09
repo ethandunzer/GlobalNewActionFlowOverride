@@ -1,4 +1,4 @@
-public with sharing class GlobalNewActionFlowOverrideController {
+public with sharing class GlobalNewFlowRouteCtrl {
     @AuraEnabled(cacheable=true)
     public static String getFlowApiNameForObject(String objectApiName) {
         if (String.isBlank(objectApiName)) {
