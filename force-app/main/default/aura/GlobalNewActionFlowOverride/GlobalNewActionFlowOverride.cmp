@@ -1,0 +1,12 @@
+<aura:component
+	access="global"
+	implements="lightning:actionOverride,force:hasSObjectName,flexipage:availableForAllPageTypes"
+>
+	<aura:attribute name="sObjectName" type="String" />
+	<aura:attribute name="flowApiName" type="String" />
+	<aura:attribute name="newRecordIdOutputName" type="String" default="NewRecordId" />
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<lightning:flow aura:id="newActionFlow" onstatuschange="{!c.handleStatusChange}" />
+</aura:component>
