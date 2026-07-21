@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+// eslint-disable-next-line no-unused-expressions
 ({
   doInit: function (component, event, helper) {
     var objectApiName = component.get("v.sObjectName");
@@ -58,4 +58,3 @@
     }
   }
 });
-/* eslint-enable no-unused-expressions */
