@@ -54,14 +54,21 @@ public with sharing class GlobalNewFlowRouteCtrl {
       return false;
     }
 
-    List<FlowDefinition> flowDefinitions = [
-      SELECT ActiveVersionId
-      FROM FlowDefinition
-      WHERE DeveloperName = :flowApiName
-      LIMIT 1
-    ];
-
-    return !flowDefinitions.isEmpty() &&
-      flowDefinitions[0].ActiveVersionId != null;
+    try {
+      List<SObject> flowDefinitions = Database.query(
+        'SELECT ActiveVersionId FROM FlowDefinition WHERE DeveloperName = :flowApiName LIMIT 1'
+      );
+      return !flowDefinitions.isEmpty() &&
+        flowDefinitions[0].get('ActiveVersionId') != null;
+    } catch (Exception e) {
+      try {
+        List<SObject> activeFlows = Database.query(
+          'SELECT Id FROM Flow WHERE DeveloperName = :flowApiName AND Status = \'Active\' LIMIT 1'
+        );
+        return !activeFlows.isEmpty();
+      } catch (Exception ignored) {
+        return false;
+      }
+    }
   }
 }
