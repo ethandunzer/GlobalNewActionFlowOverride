@@ -3,7 +3,6 @@
   doInit: function (component) {
     var objectApiName = component.get("v.sObjectName");
     var action = component.get("c.getFlowApiNameForObject");
-    var flow;
     var setErrorState = function (title, message) {
       component.set("v.hasError", true);
       component.set("v.errorTitle", title);
@@ -25,7 +24,7 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       var flowApiName;
-      var startFlowErrorMessage;
+      var flow;
 
       if (state !== "SUCCESS") {
         setErrorState(
@@ -50,17 +49,12 @@
       try {
         flow.startFlow(flowApiName);
       } catch (startFlowError) {
-        startFlowErrorMessage =
-          "The routing map contains an incorrect object or flow API name.";
-
-        if (startFlowError && startFlowError.message) {
-          startFlowErrorMessage =
-            startFlowErrorMessage + " " + startFlowError.message;
-        }
-
         setErrorState(
           "Invalid Routing Map Configuration",
-          startFlowErrorMessage
+          "The routing map contains an incorrect object or flow API name." +
+            (startFlowError && startFlowError.message
+              ? " " + startFlowError.message
+              : "")
         );
       }
     });
