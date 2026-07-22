@@ -1,4 +1,8 @@
 public with sharing class GlobalNewFlowRouteCtrl {
+  private static final String FLOW_STATUS_ACTIVE = 'Active';
+  private static final String FLOW_DEFINITION_ACTIVE_VERSION_QUERY = 'SELECT ActiveVersionId FROM FlowDefinition WHERE DeveloperName = :flowApiName LIMIT 1';
+  private static final String FLOW_ACTIVE_QUERY = 'SELECT Id FROM Flow WHERE DeveloperName = :flowApiName AND Status = :flowStatus LIMIT 1';
+
   public class FlowRouteResolutionResult {
     @AuraEnabled
     public String flowApiName;
@@ -54,19 +58,36 @@ public with sharing class GlobalNewFlowRouteCtrl {
       return false;
     }
 
+    Map<String, Object> bindVariables = new Map<String, Object>{
+      'flowApiName' => flowApiName
+    };
+
     try {
-      List<SObject> flowDefinitions = Database.query(
-        'SELECT ActiveVersionId FROM FlowDefinition WHERE DeveloperName = :flowApiName LIMIT 1'
+      List<SObject> flowDefinitions = Database.queryWithBinds(
+        FLOW_DEFINITION_ACTIVE_VERSION_QUERY,
+        bindVariables,
+        AccessLevel.USER_MODE
       );
       return !flowDefinitions.isEmpty() &&
         flowDefinitions[0].get('ActiveVersionId') != null;
-    } catch (Exception e) {
+    } catch (QueryException e) {
+      System.debug(
+        LoggingLevel.WARN,
+        'FlowDefinition query unavailable; falling back to Flow query.'
+      );
       try {
-        List<SObject> activeFlows = Database.query(
-          'SELECT Id FROM Flow WHERE DeveloperName = :flowApiName AND Status = \'Active\' LIMIT 1'
+        bindVariables.put('flowStatus', FLOW_STATUS_ACTIVE);
+        List<SObject> activeFlows = Database.queryWithBinds(
+          FLOW_ACTIVE_QUERY,
+          bindVariables,
+          AccessLevel.USER_MODE
         );
         return !activeFlows.isEmpty();
-      } catch (Exception ignored) {
+      } catch (QueryException fallbackException) {
+        System.debug(
+          LoggingLevel.WARN,
+          'Flow validation fallback query failed.'
+        );
         return false;
       }
     }
