@@ -36,11 +36,12 @@ public with sharing class GlobalNewFlowRouteCtrl {
     result.flowApiName = routes[0].Flow_Api_Name__c;
 
     if (!isFlowActive(result.flowApiName)) {
+      String configuredFlowApiName = result.flowApiName;
       result.flowApiName = null;
       result.errorCode = 'INVALID_ROUTE';
       result.errorMessage =
         'Flow "' +
-        routes[0].Flow_Api_Name__c +
+        configuredFlowApiName +
         '" is not found or does not have an active version.';
     }
 
