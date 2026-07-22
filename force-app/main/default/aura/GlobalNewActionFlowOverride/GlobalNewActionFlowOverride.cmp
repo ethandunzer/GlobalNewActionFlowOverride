@@ -5,32 +5,31 @@
 >
   <aura:attribute name="sObjectName" type="String" />
   <aura:attribute name="flowApiName" type="String" />
+  <aura:attribute name="hasError" type="Boolean" default="false" />
+  <aura:attribute name="errorTitle" type="String" default="" />
+  <aura:attribute name="errorMessage" type="String" default="" />
   <aura:attribute
     name="newRecordIdOutputName"
     type="String"
     default="NewRecordId"
   />
-  <aura:attribute name="noRouteFound" type="Boolean" default="false" />
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
   <div class="flow-page">
     <div class="flow-shell slds-card">
-      <aura:if isTrue="{!v.noRouteFound}">
+      <aura:if isTrue="{!v.hasError}">
         <div class="no-route-found slds-illustration slds-illustration_small">
           <div class="slds-illustration__figure">
             <lightning:icon iconName="utility:error" size="large" />
           </div>
           <div class="slds-illustration__body">
-            <h3 class="slds-text-heading_medium">No Routing Map Found</h3>
-            <p class="slds-text-body_regular">
-              No active routing map was found for this object. Please contact
-              your administrator to set up a routing map.
-            </p>
+            <h3 class="slds-text-heading_medium">{!v.errorTitle}</h3>
+            <p class="slds-text-body_regular">{!v.errorMessage}</p>
           </div>
         </div>
       </aura:if>
-      <aura:if isTrue="{!not(v.noRouteFound)}">
+      <aura:if isTrue="{!not(v.hasError)}">
         <lightning:flow
           aura:id="newActionFlow"
           onstatuschange="{!c.handleStatusChange}"
