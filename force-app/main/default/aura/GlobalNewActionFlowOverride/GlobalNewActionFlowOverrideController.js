@@ -23,6 +23,7 @@
 
     action.setCallback(this, function (response) {
       var state = response.getState();
+      var routeResult;
       var flowApiName;
       var flow;
 
@@ -34,7 +35,26 @@
         return;
       }
 
-      flowApiName = response.getReturnValue();
+      routeResult = response.getReturnValue() || {};
+      flowApiName = routeResult.flowApiName;
+
+      if (routeResult.errorCode === "NO_OBJECT") {
+        setErrorState("No Object Passed", routeResult.errorMessage);
+        return;
+      }
+
+      if (routeResult.errorCode === "NO_ROUTE") {
+        setErrorState("No Routing Map Found", routeResult.errorMessage);
+        return;
+      }
+
+      if (routeResult.errorCode === "INVALID_ROUTE") {
+        setErrorState(
+          "Invalid Routing Map Configuration",
+          routeResult.errorMessage
+        );
+        return;
+      }
 
       if (!flowApiName) {
         setErrorState(

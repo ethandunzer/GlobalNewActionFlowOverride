@@ -22,7 +22,7 @@ If initialization fails, the component shows an inline error state with a specif
 
 - No object API name provided.
 - No active routing map for the object.
-- Invalid routing map configuration (incorrect object/flow API names).
+- Invalid routing map configuration (missing/inactive flow API name, or incorrect object/flow API names).
 
 ## Routing Map
 
