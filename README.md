@@ -18,7 +18,11 @@ Initialization is handled in [force-app/main/default/aura/GlobalNewActionFlowOve
 2. Resolve the flow API name via Apex metadata lookup in [force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls](force-app/main/default/classes/GlobalNewFlowRouteCtrl.cls).
 3. Start that flow.
 
-If metadata lookup fails, or no active route is found for the object, navigation falls back to object home.
+If initialization fails, the component shows an inline error state with a specific message for:
+
+- No object API name provided.
+- No active routing map for the object.
+- Invalid routing map configuration (missing/inactive flow API name, or incorrect object/flow API names).
 
 ## Routing Map
 
@@ -48,7 +52,7 @@ Each routed Screen Flow must expose an output variable named NewRecordId.
 
 - On FINISHED or FINISHED_SCREEN, if NewRecordId is returned, navigate to the created record.
 - On FINISHED or FINISHED_SCREEN, if no NewRecordId is returned, navigate to object home.
-- On ERROR, navigate to object home.
+- On ERROR, show an inline routing configuration error.
 
 This logic is implemented in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideController.js) and helper navigation methods in [force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js](force-app/main/default/aura/GlobalNewActionFlowOverride/GlobalNewActionFlowOverrideHelper.js).
 

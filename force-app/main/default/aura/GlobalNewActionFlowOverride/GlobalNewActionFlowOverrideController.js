@@ -1,8 +1,21 @@
 // eslint-disable-next-line no-unused-expressions
 ({
-  doInit: function (component, event, helper) {
+  doInit: function (component) {
     var objectApiName = component.get("v.sObjectName");
     var action = component.get("c.getFlowApiNameForObject");
+    var setErrorState = function (title, message) {
+      component.set("v.hasError", true);
+      component.set("v.errorTitle", title);
+      component.set("v.errorMessage", message);
+    };
+
+    if (!objectApiName) {
+      setErrorState(
+        "No Object Passed",
+        "No object API name was provided to this action override."
+      );
+      return;
+    }
 
     action.setParams({
       objectApiName: objectApiName
@@ -10,24 +23,60 @@
 
     action.setCallback(this, function (response) {
       var state = response.getState();
+      var routeResult;
       var flowApiName;
       var flow;
 
       if (state !== "SUCCESS") {
-        helper.navigateToObjectHome(component);
+        setErrorState(
+          "Routing Lookup Error",
+          "Unable to resolve a routing map for this object."
+        );
         return;
       }
 
-      flowApiName = response.getReturnValue();
+      routeResult = response.getReturnValue() || {};
+      flowApiName = routeResult.flowApiName;
+
+      if (routeResult.errorCode === "NO_OBJECT") {
+        setErrorState("No Object Passed", routeResult.errorMessage);
+        return;
+      }
+
+      if (routeResult.errorCode === "NO_ROUTE") {
+        setErrorState("No Routing Map Found", routeResult.errorMessage);
+        return;
+      }
+
+      if (routeResult.errorCode === "INVALID_ROUTE") {
+        setErrorState(
+          "Invalid Routing Map Configuration",
+          routeResult.errorMessage
+        );
+        return;
+      }
 
       if (!flowApiName) {
-        component.set("v.noRouteFound", true);
+        setErrorState(
+          "No Routing Map Found",
+          "No active routing map was found for this object. Please contact your administrator to set up a routing map."
+        );
         return;
       }
 
       component.set("v.flowApiName", flowApiName);
       flow = component.find("newActionFlow");
-      flow.startFlow(flowApiName);
+      try {
+        flow.startFlow(flowApiName);
+      } catch (startFlowError) {
+        setErrorState(
+          "Invalid Routing Map Configuration",
+          "The routing map contains an incorrect object or flow API name." +
+            (startFlowError && startFlowError.message
+              ? " " + startFlowError.message
+              : "")
+        );
+      }
     });
 
     $A.enqueueAction(action);
@@ -54,7 +103,12 @@
     }
 
     if (status === "ERROR") {
-      helper.navigateToObjectHome(component);
+      component.set("v.hasError", true);
+      component.set("v.errorTitle", "Invalid Routing Map Configuration");
+      component.set(
+        "v.errorMessage",
+        "The routed flow failed to load. Verify the routing map object and flow API names."
+      );
     }
   }
 });
