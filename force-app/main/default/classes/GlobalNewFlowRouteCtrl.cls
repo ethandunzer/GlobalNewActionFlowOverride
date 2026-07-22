@@ -49,13 +49,11 @@ public with sharing class GlobalNewFlowRouteCtrl {
 
   @TestVisible
   private static Boolean isFlowActive(String flowApiName) {
-    List<FlowDefinition> flowDefinitions;
-
     if (String.isBlank(flowApiName)) {
       return false;
     }
 
-    flowDefinitions = [
+    List<FlowDefinition> flowDefinitions = [
       SELECT ActiveVersionId
       FROM FlowDefinition
       WHERE DeveloperName = :flowApiName
