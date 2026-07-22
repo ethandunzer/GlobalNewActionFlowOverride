@@ -1,7 +1,5 @@
 public with sharing class GlobalNewFlowRouteCtrl {
-  private static final String FLOW_STATUS_ACTIVE = 'Active';
-  private static final String FLOW_DEFINITION_ACTIVE_VERSION_QUERY = 'SELECT ActiveVersionId FROM FlowDefinition WHERE DeveloperName = :flowApiName LIMIT 1';
-  private static final String FLOW_ACTIVE_QUERY = 'SELECT Id FROM Flow WHERE DeveloperName = :flowApiName AND Status = :flowStatus LIMIT 1';
+  private static final String FLOW_RECORD_QUERY = 'SELECT Id, ApiName, ActiveVersionId FROM FlowRecord WHERE ApiName = :flowApiName LIMIT 1';
 
   public class FlowRouteResolutionResult {
     @AuraEnabled
@@ -58,38 +56,17 @@ public with sharing class GlobalNewFlowRouteCtrl {
       return false;
     }
 
-    Map<String, Object> bindVariables = new Map<String, Object>{
-      'flowApiName' => flowApiName
-    };
-
     try {
-      List<SObject> flowDefinitions = Database.queryWithBinds(
-        FLOW_DEFINITION_ACTIVE_VERSION_QUERY,
-        bindVariables,
+      List<SObject> flowRecords = Database.queryWithBinds(
+        FLOW_RECORD_QUERY,
+        new Map<String, Object>{ 'flowApiName' => flowApiName },
         AccessLevel.USER_MODE
       );
-      return !flowDefinitions.isEmpty() &&
-        flowDefinitions[0].get('ActiveVersionId') != null;
+      return !flowRecords.isEmpty() &&
+        flowRecords[0].get('ActiveVersionId') != null;
     } catch (QueryException e) {
-      System.debug(
-        LoggingLevel.WARN,
-        'FlowDefinition query unavailable; falling back to Flow query.'
-      );
-      try {
-        bindVariables.put('flowStatus', FLOW_STATUS_ACTIVE);
-        List<SObject> activeFlows = Database.queryWithBinds(
-          FLOW_ACTIVE_QUERY,
-          bindVariables,
-          AccessLevel.USER_MODE
-        );
-        return !activeFlows.isEmpty();
-      } catch (QueryException fallbackException) {
-        System.debug(
-          LoggingLevel.WARN,
-          'Flow validation fallback query failed.'
-        );
-        return false;
-      }
+      System.debug(LoggingLevel.WARN, 'FlowRecord validation query failed.');
+      return false;
     }
   }
 }
