@@ -15,6 +15,15 @@
 	display: block;
 }
 
+.THIS .no-route-found {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	min-height: 60vh;
+}
+
 @media (max-width: 768px) {
 	.THIS .flow-page {
 		padding: 0.5rem;
@@ -23,6 +32,10 @@
 	.THIS .flow-shell {
 		max-width: 100%;
 		padding: 0.75rem;
+		min-height: auto;
+	}
+
+	.THIS .no-route-found {
 		min-height: auto;
 	}
 }
