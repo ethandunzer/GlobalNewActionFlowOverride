@@ -1,5 +1,5 @@
 public with sharing class GlobalNewFlowRouteCtrl {
-  private static final String FLOW_RECORD_QUERY = 'SELECT Id, ApiName, ActiveVersionId FROM FlowRecord WHERE ApiName = :flowApiName LIMIT 1';
+  private static final String FLOW_RECORD_QUERY = 'SELECT Id, ApiName, ActiveVersionId FROM FlowRecord WHERE ApiName = :flowApiName WITH SYSTEM_MODE LIMIT 1';
 
   public class FlowRouteResolutionResult {
     @AuraEnabled
@@ -60,7 +60,7 @@ public with sharing class GlobalNewFlowRouteCtrl {
       List<SObject> flowRecords = Database.queryWithBinds(
         FLOW_RECORD_QUERY,
         new Map<String, Object>{ 'flowApiName' => flowApiName },
-        AccessLevel.USER_MODE
+        AccessLevel.SYSTEM_MODE
       );
       return !flowRecords.isEmpty() &&
         flowRecords[0].get('ActiveVersionId') != null;
