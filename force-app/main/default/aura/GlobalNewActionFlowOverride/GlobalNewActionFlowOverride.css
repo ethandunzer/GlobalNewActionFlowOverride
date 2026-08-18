@@ -1,12 +1,12 @@
-.THIS .flow-page {
-	--utility-bar-buffer: 4rem;
+
+.THIS.flow-page {
 	padding: 1rem;
+	padding-bottom: 50px;
 }
 
 .THIS .flow-shell {
 	max-width: 960px;
 	margin: 0 auto;
-	margin-bottom: calc(var(--utility-bar-buffer) + env(safe-area-inset-bottom, 0px));
 	padding: 1rem;
 	border-radius: 0.5rem;
 	background: #ffffff;
@@ -27,8 +27,9 @@
 }
 
 @media (max-width: 768px) {
-	.THIS .flow-page {
+	.THIS.flow-page {
 		padding: 0.5rem;
+		padding-bottom: 50px;
 	}
 
 	.THIS .flow-shell {
