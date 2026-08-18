@@ -1,5 +1,7 @@
-.THIS .flow-page {
+
+.THIS.flow-page {
 	padding: 1rem;
+	padding-bottom: 50px;
 }
 
 .THIS .flow-shell {
@@ -25,8 +27,9 @@
 }
 
 @media (max-width: 768px) {
-	.THIS .flow-page {
+	.THIS.flow-page {
 		padding: 0.5rem;
+		padding-bottom: 50px;
 	}
 
 	.THIS .flow-shell {
