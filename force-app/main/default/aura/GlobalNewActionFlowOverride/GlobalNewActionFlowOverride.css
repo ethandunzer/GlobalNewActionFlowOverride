@@ -1,5 +1,7 @@
 .THIS .flow-page {
+	--utility-bar-buffer: 4rem;
 	padding: 1rem;
+	padding-bottom: calc(1rem + var(--utility-bar-buffer) + env(safe-area-inset-bottom, 0px));
 }
 
 .THIS .flow-shell {
@@ -27,6 +29,7 @@
 @media (max-width: 768px) {
 	.THIS .flow-page {
 		padding: 0.5rem;
+		padding-bottom: calc(0.5rem + var(--utility-bar-buffer) + env(safe-area-inset-bottom, 0px));
 	}
 
 	.THIS .flow-shell {
