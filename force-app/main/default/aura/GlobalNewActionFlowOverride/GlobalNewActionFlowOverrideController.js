@@ -85,11 +85,35 @@
   handleStatusChange: function (component, event, helper) {
     var status = event.getParam("status");
     var outputVariables;
+    var flowErrorOutputName;
+    var hasFlowError;
     var outputName;
     var newRecordId;
+    var flowRuntimeError;
+    var flowRuntimeMessage;
 
     if (status === "FINISHED" || status === "FINISHED_SCREEN") {
       outputVariables = event.getParam("outputVariables") || [];
+      flowErrorOutputName = component.get("v.flowErrorOutputName");
+      hasFlowError = helper.getOutputVariableValue(
+        outputVariables,
+        flowErrorOutputName
+      );
+
+      if (
+        hasFlowError === true ||
+        hasFlowError === "true" ||
+        hasFlowError === "TRUE"
+      ) {
+        component.set("v.hasError", true);
+        component.set("v.errorTitle", "Flow Error");
+        component.set(
+          "v.errorMessage",
+          "The routed flow encountered an error and could not complete."
+        );
+        return;
+      }
+
       outputName = component.get("v.newRecordIdOutputName");
       newRecordId = helper.getOutputVariableValue(outputVariables, outputName);
 
@@ -103,11 +127,21 @@
     }
 
     if (status === "ERROR") {
+      flowRuntimeError =
+        event.getParam("error") ||
+        event.getParam("message") ||
+        event.getParam("faultMessage");
+      flowRuntimeMessage =
+        flowRuntimeError && typeof flowRuntimeError === "object"
+          ? flowRuntimeError.message
+          : flowRuntimeError;
+
       component.set("v.hasError", true);
-      component.set("v.errorTitle", "Invalid Routing Map Configuration");
+      component.set("v.errorTitle", "Flow Error");
       component.set(
         "v.errorMessage",
-        "The routed flow failed to load. Verify the routing map object and flow API names."
+        flowRuntimeMessage ||
+          "The routed flow encountered an error and could not complete."
       );
     }
   }
